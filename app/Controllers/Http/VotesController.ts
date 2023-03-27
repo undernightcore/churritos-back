@@ -2,6 +2,7 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Poll from 'App/Models/Poll'
 import CreateVoteValidator from 'App/Validators/CreateVoteValidator'
 import Option from 'App/Models/Option'
+import Ws from 'App/Services/ws'
 
 export default class VotesController {
   public async get({ request, response, params }: HttpContextContract) {
@@ -42,6 +43,8 @@ export default class VotesController {
     if (poll.password && poll.password !== password)
       return response.forbidden({ errors: ['La contraseña no es correcta'] })
     const vote = await option.related('votes').create({ name: data.name })
+    Ws.io.emit(`poll:${poll.id}`, 'updated')
+    Ws.io.emit(`option:${option.id}`, 'updated')
     return response.ok(vote)
   }
 }
