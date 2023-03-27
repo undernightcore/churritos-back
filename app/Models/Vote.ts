@@ -1,5 +1,6 @@
 import { DateTime } from 'luxon'
 import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
+import Option from 'App/Models/Option'
 
 export default class Vote extends BaseModel {
   @column({ isPrimary: true })
@@ -8,11 +9,11 @@ export default class Vote extends BaseModel {
   @column()
   public name: string
 
-  @belongsTo(() => Vote)
-  public response: BelongsTo<typeof Vote>
+  @belongsTo(() => Option)
+  public option: BelongsTo<typeof Option>
 
   @column({ serializeAs: null })
-  public responseId: number
+  public optionId: number
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

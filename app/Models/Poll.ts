@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
-import Question from 'App/Models/Question'
+import Option from 'App/Models/Option'
 
 export default class Poll extends BaseModel {
   @column({ isPrimary: true })
@@ -15,8 +15,8 @@ export default class Poll extends BaseModel {
   @column({ serializeAs: null })
   public password: string | null
 
-  @hasMany(() => Question)
-  public questions: HasMany<typeof Question>
+  @hasMany(() => Option)
+  public options: HasMany<typeof Option>
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

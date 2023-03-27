@@ -1,23 +1,23 @@
 import { DateTime } from 'luxon'
 import { BaseModel, BelongsTo, belongsTo, column, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
-import Question from 'App/Models/Question'
+import Poll from 'App/Models/Poll'
 import Vote from 'App/Models/Vote'
 
-export default class Response extends BaseModel {
+export default class Option extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
   @column()
-  public response: string
+  public title: string
 
   @hasMany(() => Vote)
   public votes: HasMany<typeof Vote>
 
-  @belongsTo(() => Question)
-  public question: BelongsTo<typeof Question>
+  @belongsTo(() => Poll)
+  public poll: BelongsTo<typeof Poll>
 
   @column({ serializeAs: null })
-  public questionId: number
+  public pollId: number
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
