@@ -6,21 +6,16 @@ import Ws from 'App/Services/ws'
 
 export default class VotesController {
   public async get({ request, response, params }: HttpContextContract) {
-    const password = request.input('password', '')
+    const password = request.header('password') ?? ''
     const poll = await Poll.findOrFail(params.id)
-    const options = await poll
-      .related('options')
-      .query()
-      .withCount('votes', (query) => {
-        query.as('voteCount')
-      })
+    const options = await poll.related('options').query().withCount('votes')
     return poll.password && poll.password !== password
       ? response.forbidden({ errors: ['La contraseña no es correcta'] })
       : response.ok(options)
   }
 
   public async getByOption({ request, response, params }: HttpContextContract) {
-    const password = request.input('password', '')
+    const password = request.header('password') ?? ''
     const page = request.input('page', 1)
     const perPage = request.input('page', 20)
     const option = await Option.findOrFail(params.id)
@@ -36,7 +31,7 @@ export default class VotesController {
   }
 
   public async create({ request, response, params }: HttpContextContract) {
-    const password = request.input('password', '')
+    const password = request.header('password') ?? ''
     const data = await request.validate(CreateVoteValidator)
     const poll = await Poll.findOrFail(params.id)
     const option = await Option.findOrFail(data.option)

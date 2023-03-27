@@ -24,4 +24,6 @@ export default class Option extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  public serializeExtras = () => ({ ...this.$extras })
 }
