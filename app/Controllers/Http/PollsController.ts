@@ -8,4 +8,13 @@ export default class PollsController {
     const poll = await Poll.create(data)
     return response.ok(poll)
   }
+
+  public async get({ request, response, params }: HttpContextContract) {
+    const password = request.input('password', '')
+    const poll = await Poll.findOrFail(params.id)
+    await poll.load('options')
+    return poll.password && poll.password !== password
+      ? response.forbidden({ errors: ['La contraseña no es correcta'] })
+      : response.ok(poll)
+  }
 }

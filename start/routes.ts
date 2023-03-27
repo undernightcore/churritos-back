@@ -1,1 +1,2 @@
-import './routes/poll'
+import './routes/polls'
+import './routes/options'
