@@ -8,7 +8,7 @@ export default class VotesController {
   public async get({ request, response, params }: HttpContextContract) {
     const password = request.header('password') ?? ''
     const poll = await Poll.findOrFail(params.id)
-    const options = await poll.related('options').query().withCount('votes')
+    const options = await poll.related('options').query().orderBy('name').withCount('votes')
     return poll.password && poll.password !== password
       ? response.forbidden({ errors: ['La contraseña no es correcta'] })
       : response.ok(options)
@@ -17,7 +17,7 @@ export default class VotesController {
   public async getByOption({ request, response, params }: HttpContextContract) {
     const password = request.header('password') ?? ''
     const page = request.input('page', 1)
-    const perPage = request.input('page', 20)
+    const perPage = request.input('perPage', 20)
     const option = await Option.findOrFail(params.id)
     const poll = await Poll.findOrFail(option.pollId)
     if (poll.password && poll.password !== password)
